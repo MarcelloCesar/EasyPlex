@@ -146,10 +146,17 @@
                     } else if (char.match(/[0-9]/) != null){
                         varNumber += char;
                         state = 2;
-                        flagInverter = false;
-                    } else if (char.match(/[a-zA-Z]/) != null){
-                        state = 4;
-                        varString += char;                    
+                        flagInverter = false;                 
+                    } else if (char.match(/[a-zA-Z]/)){
+                        varString += char;
+                        state = 5;
+                        valid = true;
+
+                        varAtual = [];
+                        varAtual = [parseInt(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber)) : (varNumber == '' ? '1' : varNumber)),
+                                    varString
+                        ]
+                        vars.push(varAtual);                  
                     } else {
                         throw exc
                     }
