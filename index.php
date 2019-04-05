@@ -174,7 +174,9 @@
                         state = 5;
                         valid = true;                        
                         varString += char; 
-                        flagInverter = true;                   
+                        //flagInverter = true;                   
+                        //Foi preciso remover esta inversao pois estava causando um bug em -x1+x2, tornando x2 negativo
+                        // Ver se no futuro retirar esta inversao causara outros bugs ou se ficou certo
 
                         varAtual = [];
                         varAtual = [parseInt(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber)) : (varNumber == '' ? '1' : varNumber)),

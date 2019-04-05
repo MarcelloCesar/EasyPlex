@@ -2,6 +2,8 @@
 require_once('simplexRestriction.php');
 require_once('simplexObjectiveFunction.php');
 
+define('MAX_ITERATIONS_DEFAULT', 0xFFFFFF);
+
 class SimplexProblem {
 
     private $_objective;
@@ -11,8 +13,7 @@ class SimplexProblem {
 	private $_fillerVarNames;
     private $_restrictions;
 	private $_solutions;
-    private $_problemTable;
-	private $_contNegativeObjetiveVariables;
+    private $_problemTable;	
 	private $_bestSolution;
 	
 
@@ -21,7 +22,7 @@ class SimplexProblem {
 		$this->_restrictions   = array();
 		$this->_varNames       = array();
 		$this->_solutions      = array();
-		$this->_fillerVarNames = array();
+		$this->_fillerVarNames = array();		
 	}
     
     public function setObjectiveFunction($objFunction)
@@ -52,14 +53,19 @@ class SimplexProblem {
 		return json_encode($this->_bestSolution);
 	}
 	
-    public function solve()
+    public function solve($maxIterations = MAX_ITERATIONS_DEFAULT)
     {
         $this->_validProblem();
 		$this->_createFillerVariables();		
-		$this->_createProblemTable();   		
-			
-		while($this->_contNegativeObjetiveVariables > 0)
+		$this->_createProblemTable();   				
+		
+		$iterationsCount = 1;
+		while($this->_contNegativeObjetiveVariables() > 0)
 		{
+			if($iterationsCount > $maxIterations){
+				throw new Exception('Número máximo de iterações atingido. O problema provavelmente possui infinitas soluções.');
+			}
+			
 			$pivotColumn = $this->_findPivotColumn();
 
 			$pivotLine   = $this->_findPivotLine($pivotColumn);
@@ -70,16 +76,28 @@ class SimplexProblem {
 			
 			$this->_balancePivotColumn($pivotColumn, $pivotLine);				
 			
-			$this->_addSolution();			
-
-			$this->_contNegativeObjetiveVariables--;
+			$this->_addSolution();	
+			$iterationsCount++;					
 		}
 		$this->_findBestAnswer();		
     }
 
     private function _validProblem(){
 
-    }
+	}
+	
+	private function _contNegativeObjetiveVariables()
+	{
+		$numberOfNegativeVariables = 0;
+		foreach(array_merge($this->_varNames, $this->_fillerVarNames) as $varColumn)
+		{
+			if(end($this->_problemTable[$varColumn]) < 0){
+				$numberOfNegativeVariables++;
+			}
+		}
+
+		return $numberOfNegativeVariables;
+	}
 
     private function _createProblemTable()
     {
@@ -106,11 +124,6 @@ class SimplexProblem {
 			} else {
 				$number = $variable->getValue() * (-1);
 				$problemTable[$var][] = $number;
-				
-				if($number < 0)
-				{
-					$this->_contNegativeObjetiveVariables++;
-				}
 			}
         }        
 
@@ -228,21 +241,23 @@ class SimplexProblem {
 		$this->_solutions[]  = str_replace("\"", "", json_encode($this->_problemTable));
 	}
 
-	// funcao de debug, remover
-	private function echoTable()
-	{
-		echo json_encode($this->_problemTable) . "<BR><BR>";
-	}
-
 	private function _findBestAnswer()
 	{
 		$bestSolution = array();
-		foreach($this->_problemTable['base'] as $key => $variableName)
-		{
-			if(!in_array($variableName, $this->_fillerVarNames))
-			{
+		$interestVariables   = array_merge(
+			$this->_varNames,
+			$this->_fillerVarNames
+		);
+		$interestVariables[] = $this->_objectiveFunction->getObjectiveVarName();		
+		
+		foreach($interestVariables as $variableName){			
+			$key = array_search($variableName, $this->_problemTable['base']);
+
+			if($key !== false){
 				$bestSolution[$variableName] = $this->_problemTable['b'][$key];
-			}
+			} else {				
+				$bestSolution[$variableName] = 0;
+			}			
 		}
 
 		$this->_bestSolution = $bestSolution;
