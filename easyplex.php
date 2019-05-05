@@ -4,7 +4,7 @@ require_once('simplexProblem.php');
 $request = json_decode($_POST['problem']);
 
 try{
-    $problem = new simplexProblem();
+    $problem = new simplexProblem($request->objective);
 
     $objectiveFunction = new SimplexObjectiveFunction($request->objectiveVar);
     foreach($request->objectiveExp as $variable){
@@ -23,11 +23,22 @@ try{
         $problem->addRestriction($restriction);
     }
 
-    $problem->solve();
-    echo $problem->getBestSolution();
+    $problem->solve((int)$_POST['maxIterations']);
 
-} catch (Exception $exc){
-    echo $exc->getMessage();
+    $response = array();
+    $response['type']    = 1;
+    $response['message'] = array();
+    $response['message']['bestSolution']   = $problem->getBestSolution();
+    $response['message']['otherSolutions'] = $problem->getSolutions();
+    $response['message']['analysisBoard']  = $problem->getAnalysisBoard();
+    echo json_encode($response);
+
+} catch (Exception $exc){  
+    $response = array();
+    $response['type'] = 2;
+    $response['message'] = $exc->getMessage();
+
+    echo json_encode($response);
 }
 
 
