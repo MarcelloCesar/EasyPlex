@@ -325,7 +325,8 @@ function parseExp(inputString)
     var valid = false;
     var varString = '';
     var varNumber = '';
-    var flagInverter = false;        
+    var flagInverter = false;
+    var decimal = '';        
 
     var vars = [];
     var varAtual = [];
@@ -345,6 +346,7 @@ function parseExp(inputString)
                 flagInverter = false;
                 varString = '';                  
                 varNumber = '';
+                decimal = '';  
                 if(char === '+') {
                     state = 1;
                 } else if (char === '-') {
@@ -359,10 +361,10 @@ function parseExp(inputString)
                     valid = true;
 
                     varAtual = [];
-                    varAtual = [parseInt(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber)) : (varNumber == '' ? '1' : varNumber)),
+                    varAtual = [parseFloat(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber + '.' + decimal)) : (varNumber == '' ? '1' : varNumber + '.' + decimal)),
                                 varString
                     ]
-                    vars.push(varAtual);                  
+                    vars.push(varAtual);                   
                 } else {
                     throw exc
                 }
@@ -385,10 +387,10 @@ function parseExp(inputString)
                     // Ver se no futuro retirar esta inversao causara outros bugs ou se ficou certo
 
                     varAtual = [];
-                    varAtual = [parseInt(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber)) : (varNumber == '' ? '1' : varNumber)),
+                    varAtual = [parseFloat(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber + '.' + decimal)) : (varNumber == '' ? '1' : varNumber + '.' + decimal)),
                                 varString
                     ]
-                    vars.push(varAtual);
+                    vars.push(varAtual); 
                 } else {
                     throw exc;
                 }
@@ -406,10 +408,15 @@ function parseExp(inputString)
                     valid = true;
 
                     varAtual = [];
-                    varAtual = [parseInt(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber)) : (varNumber == '' ? '1' : varNumber)),
+                    varAtual = [parseFloat(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber + '.' + decimal)) : (varNumber == '' ? '1' : varNumber + '.' + decimal)),
                                 varString
                     ]
-                    vars.push(varAtual);
+                    vars.push(varAtual); 
+                } else if (char === '.' || char === ','){
+
+                    state = 6;
+                    valid = false;
+                
                 } else {
                     throw exc;
                 }
@@ -418,7 +425,8 @@ function parseExp(inputString)
             case 3:
                 valid = false;  
                 varString = '';                  
-                varNumber = '';               
+                varNumber = '';   
+                decimal = '';              
                 
                 if (char.match(/[0-9]/) != null){
                     varNumber += char;                        
@@ -431,10 +439,10 @@ function parseExp(inputString)
                     flagInverter = true;                   
 
                     varAtual = [];
-                    varAtual = [parseInt(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber)) : (varNumber == '' ? '1' : varNumber)),
+                    varAtual = [parseFloat(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber + '.' + decimal)) : (varNumber == '' ? '1' : varNumber + '.' + decimal)),
                                 varString
                     ]
-                    vars.push(varAtual);
+                    vars.push(varAtual); 
                 } else {
                     throw exc
                 }
@@ -448,6 +456,7 @@ function parseExp(inputString)
                 } else if (char === '+'){
                     varAtual = [];
                     varNumber = '';
+                    decimal = '';  
                     flagInverter = false;
                     varString = '';
                     state = 1;
@@ -455,6 +464,7 @@ function parseExp(inputString)
                 } else if(char === '-'){
                     varAtual = [];
                     varNumber = '';
+                    decimal = '';  
                     flagInverter = true;
                     varString = '';
                     state = 3;
@@ -464,6 +474,35 @@ function parseExp(inputString)
                 }
             
                 break;
+
+            case 6:
+
+                if(char.match(/[0-9]/)){
+                    state = 7;
+                    valid = false;
+                    decimal += char;
+                } else {
+                    throw exc;
+                }
+
+                break;
+
+            case 7:
+
+                if(char.match(/[0-9]/)){
+                    decimal += char;
+                } else if (char.match(/[a-zA-Z]/)){
+                    valid = true;
+                    state = 5;
+                    varString += char; 
+
+                    varAtual = [];
+                    varAtual = [parseFloat(flagInverter ? (varNumber == '' ? '-1' : ('-' + varNumber + '.' + decimal)) : (varNumber == '' ? '1' : varNumber + '.' + decimal)),
+                                varString
+                    ]
+                    vars.push(varAtual); 
+                    decimal = '';  
+                }
         }
     }
 

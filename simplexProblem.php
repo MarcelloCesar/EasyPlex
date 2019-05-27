@@ -73,12 +73,12 @@ class SimplexProblem {
 		$this->_createProblemTable();   				
 		
 		$iterationsCount = 1;
-		while($this->_contNegativeObjetiveVariables() > 0)
+		if($maxIterations === 0){
+			throw new Exception('Número máximo de iterações atingido. Tente aumentar o número máximo de iterações. Se isto não resolver, o problema provavelmente possui infinitas soluções.');
+		}
+
+		while(($this->_contNegativeObjetiveVariables() > 0) && ($iterationsCount <= $maxIterations))
 		{
-			if($iterationsCount > $maxIterations){
-				throw new Exception('Número máximo de iterações atingido. Tente aumentar o número máximo de iterações. Se isto não resolver, o problema provavelmente possui infinitas soluções.');
-			}
-			
 			$pivotColumn = $this->_findPivotColumn();
 
 			$pivotLine   = $this->_findPivotLine($pivotColumn);
@@ -319,9 +319,17 @@ class SimplexProblem {
 		$analysisBoard['Preço Sombra']      = array();
 		foreach($analysisBoard['Variável'] as $var){
 			$analysisBoard['Valor Inicial'][] = $this->_findValueForVar(0, $var);
-			$analysisBoard['Valor Final'][]   = $this->_findValueForVar(
-				count($this->_solutions) - 1, $var
-			);
+			
+			if($this->_objective == 'min' && $var == $this->_objectiveFunction->getObjectiveVarName()){
+				$analysisBoard['Valor Final'][]   = $this->_findValueForVar(
+					count($this->_solutions) - 1, $var
+				) * -1;
+			} else {
+				$analysisBoard['Valor Final'][]   = $this->_findValueForVar(
+					count($this->_solutions) - 1, $var
+				);
+			}
+			
 			$maxMin = $this->_findMaxMinIncreasing($var);
 			$analysisBoard['Max. Aumento'][] = $maxMin[0];
 			$analysisBoard['Min. Redução'][] = $maxMin[1];
