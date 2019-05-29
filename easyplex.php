@@ -1,5 +1,8 @@
 <?php
 
+if($_SERVER['REQUEST_METHOD'] == 'GET'){
+    header('location: index.php');
+}
 require_once('simplexProblem.php');
 $request = json_decode($_POST['problem']);
 

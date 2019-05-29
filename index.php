@@ -29,6 +29,9 @@
                 </li>
             </ul>
         </div>
+        <div>
+            <a href="mochila.php" style="color: black;">Ir para o EasyBag</a>
+        </div>
     </nav>
 </div>
 <div id="main-content" class="container-fluid">    
