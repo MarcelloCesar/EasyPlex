@@ -1,45 +1,121 @@
-**Edit a file, create a new file, and clone from Bitbucket in under 2 minutes**
+# EasyPlex
 
-When you're done, you can delete the content in this README and update the file with details for others getting started with your repository.
+Repositório para a implementação do algoritmo Simplex e Mochila.
 
-*We recommend that you open this README in another tab as you perform the tasks below. You can [watch our video](https://youtu.be/0ocf7u76WSo) for a full demo of all the steps in this tutorial. Open the video in a new tab to avoid leaving Bitbucket.*
+Projeto de Pesquisa Operacional
+5º Semestre BSI UNIVEM
 
----
+O Simplex permite que se encontre valores ideais em situações em que diversos aspectos precisam ser respeitados. Diante de um problema, são estabelecidas inequações que representam restrições para as variáveis. A partir daí, testa-se possibilidades de maneira a otimizar, isto é, maximizar ou minimizar o resultado da forma mais rápida possível.
 
-## Edit a file
+O algoritmo da mochila consiste em preencher a mochila com objetos diferentes de pesos e valores. O objetivo é que preencha a mochila com o maior valor possível, não ultrapassando o peso máximo.
 
-You’ll start by editing this README file to learn how to edit a file in Bitbucket.
 
-1. Click **Source** on the left side.
-2. Click the README.md link from the list of files.
-3. Click the **Edit** button.
-4. Delete the following text: *Delete this line to make a change to the README from Bitbucket.*
-5. After making your change, click **Commit** and then **Commit** again in the dialog. The commit page will open and you’ll see the change you just made.
-6. Go back to the **Source** page.
+## Ferramentas
 
----
+- Javascript
+- PHP
+- JQuery
+- GitHub para hospedagem e versionamento
+- Bootstrap
 
-## Create a file
+### Simplex
 
-Next, you’ll add a new file to this repository.
+- Algoritmo Simplex para problemas de maximização.
+- Algoritmo Simplex para problemas de minimização.
+- Pode ser visualizado o passo a passo das tabelas geradas pelo método Simplex.
+- Quadro de Análise de Sensibilidade.
+- Apresentação resumida da solução otimizada do problema.
+- Tratamento de soluções infinitas.
+- Tratamento de soluções impossíveis.
 
-1. Click the **New file** button at the top of the **Source** page.
-2. Give the file a filename of **contributors.txt**.
-3. Enter your name in the empty file space.
-4. Click **Commit** and then **Commit** again in the dialog.
-5. Go back to the **Source** page.
+### Mochila
 
-Before you move on, go ahead and explore the repository. You've already seen the **Source** page, but check out the **Commits**, **Branches**, and **Settings** pages.
+- Apresentação da solução, dos itens a serem considerados e a tabela de cálculo.
 
----
 
-## Clone a repository
+## Entradas personalizadas para:
 
-Use these steps to clone from SourceTree, our client for using the repository command-line free. Cloning allows you to work on your files locally. If you don't yet have SourceTree, [download and install first](https://www.sourcetreeapp.com/). If you prefer to clone from the command line, see [Clone a repository](https://confluence.atlassian.com/x/4whODQ).
+### Simplex
 
-1. You’ll see the clone button under the **Source** heading. Click that button.
-2. Now click **Check out in SourceTree**. You may need to create a SourceTree account or log in.
-3. When you see the **Clone New** dialog in SourceTree, update the destination path and name if you’d like to and then click **Clone**.
-4. Open the directory you just created to see your repository’s files.
+- Limite máximo de iterações
+- Tipo de Simplex (MAX ou MIN)
+- Quantidade de variáveis e restrições
+- Nome das variáveis do problema
 
-Now that you're more familiar with your Bitbucket repository, go ahead and add a new file locally. You can [push your change back to Bitbucket with SourceTree](https://confluence.atlassian.com/x/iqyBMg), or you can [add, commit,](https://confluence.atlassian.com/x/8QhODQ) and [push from the command line](https://confluence.atlassian.com/x/NQ0zDQ).
+### Mochila
+- Capacidade da mochila
+- Peso e valor dos itens
+- Nome para cada item
+
+## Limitações
+
+### Simplex
+
+- Somente a possibilidade de restrições de tipo menor igual.
+
+
+### Mochila
+
+- Não utilizar itens com nomes iguais
+- Serão permitidos somente valores positivos
+- Serão permitidos somente pesos positivos
+
+
+## Datas Importantes
+
+### Simplex
+
+Datas       | Eventos
+---------   | ------
+30/03/19    | Início do Planejamento
+15/04/19    | Criação da Estrutura Principal
+22/04/19    | Cálculo de maximização
+29/04/19    | Visualização da solução resumida - MVP 1
+01/05/19    | Cálculo da minimização
+06/05/19    | Análise de sensibilidade e passo a passo - MVP 2
+30/05/2019  | Atualização do README
+
+
+### Mochila
+
+Datas | Eventos
+---------   | ------
+13/05/19    | Início do Planejamento
+20/05/19    | Realização do algoritmo 
+27/05/19    | Finalização da interface de usuário
+30/05/2019  | Atualização do README
+
+## Compatibilidade
+
+Requisitos          | Ferramentas
+---------           | ------
+Navegadores         | Mozila Firefox, Chrome, Internet Explorer
+Sistema Operacional | Ubuntu, Windows, Mac, RedHat
+
+## Tecnologias
+
+Tecnologias     | Ferramentas
+---------       | ------
+Front-End       | HTML, Javascript, JQuery, Bootstrap
+Back-End        | PHP
+Editor de Texto | Visual Studio Code
+
+## Atividades Realizadas no Período
+
+### Simplex
+
+Código | Título | Tarefa | Situação | Observação
+--------- | ------ | -------| -------| -------
+1 | Maximizar | Montar a Tabela Simplex, e possibilitar o usuário a maximizar modelos de simplex com sistemas lineares. | Concluído | Apenas restrições de “<=”
+2 | Minimizar | Montar a Tabela Simplex, e possibilitar o usuário a minimizar modelos de simplex com sistemas lineares. | Concluído | Apenas restrições de “<=”
+3 | Adição de restrições | Possibilitar o usuário a adicionar inputs para maiores números de restrições. | Concluído |
+4 | Remoção de restrições | Possibilitar o usuário a remover inputs para menores números de restrições. | Concluído |
+5 | Demonstrar passo a passo | Demonstrar ao usuário as alterações na tabela causada pelas iterações do método simplex. | Concluído|
+6  | Tabela de sensibilidade | Demonstrar ao usuário a tabela de sensibilidade. |Concluído|
+
+### Mochila
+
+Código | Título | Tarefa | Situação | Observação
+--------- | ------ | -------| -------| -------
+1 | Entrada de Dados | Permitir ao usuário a definição dos itens e suas caracteróisticas tais como nome, valor e peso |
+2 | Solução do problema | Mostrar ao usuário os itens selecionados pelo algoritmo como qualificados | Concluído |

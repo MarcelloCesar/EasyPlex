@@ -79,6 +79,14 @@ function resolve()
                 item.name   = name.val();
                 item.weight = weight.val();
                 item.value  = value.val();
+
+                if(item.weight < 0){
+                    throw "Por favor, não insira itens com peso negativo.";
+                }
+
+                if(item.value < 0){
+                    throw "Por favor, não insira itens com valor negativo.";
+                }
                 
                 items.push(item);
 
