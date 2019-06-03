@@ -41,14 +41,14 @@ class SimplexProblem {
 	public function addRestriction(SimplexRestriction $restriction){
 		//throw exception instanceof
 		
-		if(!in_array($restriction, $this->_restrictions)){
+		//if(!in_array($restriction, $this->_restrictions)){
 			$this->_restrictions[] = $restriction;			
 			foreach($restriction->getVarNames() as $varName){
 				if(!in_array($varName, $this->_varNames)){
 					$this->_varNames[] = $varName;
 				}
 			}
-		}
+		//}
 	}
 	
 	public function getSolutions(){		
